@@ -179,13 +179,17 @@
       if (leftBtn) leftBtn.hidden = track.scrollLeft <= 1;
       if (rightBtn) rightBtn.hidden = track.scrollLeft >= max - 1;
     };
-    var crumbLinks = document.querySelectorAll('.ig-breadcrumb a');
-    var parentHref = crumbLinks.length ? crumbLinks[crumbLinks.length - 1].getAttribute('href') : 'x';
-    var key = 'ig-dirs-scroll:' + parentHref + ':' + track.children.length;
+    /* позиция полосы принадлежит конкретной странице: возврат в категорию
+       из другого раздела всегда открывает табы с начала */
+    var key = 'ig-dirs-scroll:' + location.pathname + location.search;
     var save = function () { try { sessionStorage.setItem(key, String(Math.round(track.scrollLeft))); } catch (err) {} };
     var max = track.scrollWidth - track.clientWidth;
     var saved = null;
-    try { saved = sessionStorage.getItem(key); } catch (err2) {}
+    try {
+      if (sessionStorage.getItem('ig-dirs-last') === key) saved = sessionStorage.getItem(key);
+      else sessionStorage.removeItem(key);
+      sessionStorage.setItem('ig-dirs-last', key);
+    } catch (err2) {}
     var prevBehavior = track.style.scrollBehavior;
     track.style.scrollBehavior = 'auto';
     if (saved !== null && !isNaN(parseFloat(saved))) track.scrollLeft = Math.max(0, Math.min(max, parseFloat(saved)));
