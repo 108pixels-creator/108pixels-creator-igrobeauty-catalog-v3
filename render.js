@@ -33,10 +33,14 @@
     { k: 'l', title: 'Продуктовая линия', min: 2 },
     { k: 'y', title: 'Тип продукта' },
     { k: 'e', title: 'Действие / эффект' },
-    { k: 'z', title: 'Область применения' },
     { k: 't', title: 'Технология / задача', min: 2 },
     { k: 's', title: 'Линия / серия' }
   ];
+  /* порядок панели по направлениям; не перечисленные фасеты идут в конце в порядке FACETS */
+  var FACET_ORDER = {
+    cosm: ['g', 'c', 't', 'l', 'e', 'y'],
+    hair: ['g', 'c', 'l', 's', 't', 'y']
+  };
   /* быстрые фильтры: level — только на этом уровне, minLevel — от этого уровня и глубже */
   var QF_ROWS = [
     { k: 'e', label: 'Действие / эффект:', level: 3 },
@@ -60,6 +64,13 @@
   /* flat — аналитические категории: сразу товары, без карточек и переключателя линий */
   var hasLines = !node.flat && distinct(scope, 'l') >= 2 && (node.level === 3 || (node.level === 2 && !hasChildren));
   var facets = FACETS.filter(function (f) { return distinct(scope, f.k) >= (f.min || 1); });
+  (function () {
+    var ord = FACET_ORDER[node.cat]; if (!ord) return;
+    facets.sort(function (a, b) {
+      var ia = ord.indexOf(a.k), ib = ord.indexOf(b.k);
+      return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+    });
+  })();
   var brandChips = (function () {
     if (distinct(scope, 'g') < 2) return [];
     var keys = valuesOf('k');
@@ -144,7 +155,6 @@
   var html = '<section class="ig-hero ig-hero--band"><div class="ig-container">' +
     '<nav class="ig-breadcrumb" aria-label="Хлебные крошки">' + crumbs + '</nav>' +
     '<h1 class="ig-hero__title">' + esc(node.title) + '</h1>' +
-    (node.meta ? '<div class="ig-hero__meta" style="margin-top:8px">' + esc(node.meta) + '</div>' : '') +
     '</div></section>';
   if (node.dirs && node.dirs.length) {
     html += '<section class="ig-directions"><div class="ig-container ig-directions__wrap">' +

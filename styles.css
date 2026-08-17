@@ -238,8 +238,6 @@ ul { margin: 0; padding: 0; list-style: none; }
 .ig-navlink:hover { color: var(--on-dark); background: rgba(255,255,255,0.07); }
 .ig-navlink[aria-expanded="true"] { background: rgba(255,255,255,0.12); }
 .ig-navlink .ig-ic { color: currentColor; }
-.ig-mainnav__promo .ig-navlink { color: var(--gold-light); }
-.ig-mainnav__promo .ig-navlink:hover { color: var(--gold); }
 
 /* ==========================================================================
    CATALOG MEGA MENU
