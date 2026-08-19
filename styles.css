@@ -218,6 +218,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   min-height: 56px;
 }
 .ig-mainnav__list { display: flex; align-items: stretch; }
+.ig-mainnav__list--end { margin-left: auto; }
 .ig-navlink {
   display: inline-flex;
   align-items: center;
@@ -336,7 +337,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 /* ==========================================================================
    DIRECTION TABS (round-icon pills) — hair page
    ========================================================================== */
-.ig-directions { padding-block: var(--space-2) var(--space-4); }
+.ig-directions { padding-block: var(--space-2) var(--space-2); }
 .ig-directions__wrap { display: flex; align-items: center; position: relative; }
 .ig-directions__track {
   display: flex;
@@ -589,6 +590,20 @@ ul { margin: 0; padding: 0; list-style: none; }
   color: var(--ink);
   white-space: nowrap;
 }
+/* «Цена по запросу» — мелко и в две строки, чтобы кнопка не сжималась */
+.ig-card__price--ask {
+  font-size: 12px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.2;
+  color: var(--ink-soft);
+  white-space: normal;
+  max-width: 7em;
+}
+/* счётчик в кнопке «Фильтры»: место под двузначное число зарезервировано */
+.ig-btn__num { margin-left: 4px; }
+.ig-btn__num:empty { display: none; }
+/* ширина под «Фильтры · 99»: без счётчика содержимое центрируется */
+.ig-toolbar [data-open="filters"] { min-width: 158px; }
 
 /* buttons */
 .ig-btn {
@@ -965,10 +980,21 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 
 
+/* лейбл «ХИТ» на чипе бренда */
+.ig-chip--hit { position: relative; overflow: visible; }
+.ig-chip__hit {
+  position: absolute; top: -6px; right: -6px;
+  padding: 1px 5px; border-radius: 999px;
+  background: var(--ink); color: #fff;
+  font-size: 9px; font-weight: var(--weight-bold);
+  letter-spacing: 0.08em; line-height: 1.4;
+  pointer-events: none;
+}
+
 /* ==========================================================================
    QUICK FILTERS (два измерения: действие/задача и линейка/серия)
    ========================================================================== */
-.ig-qf { display: flex; flex-direction: column; gap: var(--space-3); margin-top: var(--space-4); }
+.ig-qf { display: flex; flex-direction: column; gap: var(--space-3); margin-top: var(--space-2); }
 .ig-qf__row { display: grid; grid-template-columns: var(--qf-indent, 140px) 1fr; align-items: start; column-gap: 0; row-gap: var(--space-2); }
 .ig-qf__label {
   min-height: var(--chip-h); display: flex; align-items: center;

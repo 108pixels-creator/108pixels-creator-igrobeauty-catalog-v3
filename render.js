@@ -41,6 +41,8 @@
     cosm: ['g', 'c', 't', 'l', 'e', 'y'],
     hair: ['g', 'c', 'l', 's', 't', 'y']
   };
+  /* бренды-хиты: на чипе рисуем чёрный лейбл в правом верхнем углу */
+  var HIT_BRANDS = ['nirvel professional', 'levissime', 'iuver', 'depilflax', 'игроbeauty'];
   /* быстрые фильтры: level — только на этом уровне, minLevel — от этого уровня и глубже */
   var QF_ROWS = [
     { k: 'e', label: 'Действие / эффект:', level: 3 },
@@ -178,7 +180,7 @@
     var total = filtered(sel).length;
     var n = totalSelected(sel);
     var left = '<button class="ig-btn ig-btn--outline' + (n ? ' is-active' : '') + '" data-open="filters">' +
-      ic('filter', 18) + ' Фильтры' + (n ? ' · ' + n : '') + '</button>';
+      ic('filter', 18) + ' Фильтры<span class="ig-btn__num">' + (n ? '· ' + n : '') + '</span></button>';
 
     if (brandChips.length) {
       var bc = countsFor(sel, 'g');
@@ -186,8 +188,9 @@
       brandChips.forEach(function (b) {
         var on = sel.g.indexOf(b) > -1, cnt = bc[b] || 0;
         if (!cnt && !on) return;
-        left += '<button class="ig-chip ' + (on ? 'ig-chip--ghost is-active' : 'ig-chip--ghost') + '" data-facet="g" data-val="' + esc(b) + '">' +
-          esc(b) + ' <span class="ig-chip__count">' + NUM(cnt) + '</span></button>';
+        var hit = HIT_BRANDS.indexOf(b.trim().toLowerCase()) > -1;
+        left += '<button class="ig-chip ig-chip--ghost' + (on ? ' is-active' : '') + (hit ? ' ig-chip--hit' : '') + '" data-facet="g" data-val="' + esc(b) + '">' +
+          esc(b) + ' <span class="ig-chip__count">' + NUM(cnt) + '</span>' + (hit ? '<span class="ig-chip__hit">ХИТ</span>' : '') + '</button>';
       });
     }
     if (hasLines) {
@@ -237,7 +240,7 @@
       '<div class="ig-card__name" title="' + esc(p.n) + '">' + esc(p.n) + '</div>' +
       (p.l ? '<div class="ig-card__line" title="' + esc(p.l) + '">' + esc(p.l) + '</div>' : '') +
       '<div class="ig-card__art"><span>Арт. ' + esc(p.a) + '</span></div>' +
-      '<div class="ig-card__foot"><span class="ig-card__price">' + esc(priceLabel(p)) + '</span>' +
+      '<div class="ig-card__foot"><span class="ig-card__price' + (p.r ? '' : ' ig-card__price--ask') + '">' + esc(priceLabel(p)) + '</span>' +
       '<button class="ig-btn ig-btn--primary">В корзину</button></div>' +
       '</div></article>';
   }
@@ -403,7 +406,8 @@
     var apply = t.closest('.ig-drawer__foot .ig-btn--dark');
     if (apply) { sel = pending ? clone(pending) : sel; pending = null; afterFilterChange(); return; }
     var reset = t.closest('.ig-drawer__foot [data-close]');
-    if (reset) { pending = {}; FACETS.forEach(function (f) { pending[f.k] = []; }); renderFilters(); renderLinesDrawer(); return; }
+    /* «Сбросить» — снимает фильтры сразу и закрывает панель */
+    if (reset) { pending = null; FACETS.forEach(function (f) { sel[f.k] = []; }); afterFilterChange(); return; }
 
     if (t.closest('[data-reset-all]')) {
       FACETS.forEach(function (f) { sel[f.k] = []; });

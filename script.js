@@ -28,9 +28,8 @@
     var openBtn = t.closest('[data-open]');
     if (openBtn) { openDrawer('drawer-' + openBtn.getAttribute('data-open')); return; }
 
-    /* «Показать» закрывает панель, «Сбросить» — нет (только очищает выбор) */
+    /* «Показать» и «Сбросить» закрывают панель (сброс применяется сразу) */
     if (t.closest('.ig-drawer__foot .ig-btn--dark')) { closeAll(); return; }
-    if (t.closest('.ig-drawer__foot [data-close]')) return;
     if (t.closest('[data-close]')) { closeAll(); return; }
 
     /* мега-меню */
